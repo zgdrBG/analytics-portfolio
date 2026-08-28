@@ -1,0 +1,13 @@
+# Python venv
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local environment variables and secrets
+.env
+
+# Keys
+keys/
