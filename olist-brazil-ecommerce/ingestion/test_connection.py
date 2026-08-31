@@ -1,16 +1,16 @@
 from snowflake_connector import create_connection
 
-def main():
+def test_connection():
     with create_connection() as connection:
         with connection.cursor() as cursor:
             cursor.execute("""
                 SELECT
                     CURRENT_USER(),
-                    CURRENT_DATABASE()
+                    'Connection is successful'
             """)
 
             result = cursor.fetchall()
             print(result)
 
 if __name__ == "__main__":
-    main()
+    test_connection()

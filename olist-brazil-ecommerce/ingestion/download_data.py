@@ -1,8 +1,6 @@
 import subprocess
 
-'''
-Downloads the dataset and saves it in a designated path.
-'''
+'''Downloads the dataset and saves it in a designated path.'''
 
 def download_dataset(dataset_name, path):
     subprocess.run(
