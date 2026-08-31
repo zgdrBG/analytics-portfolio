@@ -1,6 +1,8 @@
 {{
     config(
-        materialized='table'
+        materialized='incremental',
+        unique_key='order_id',
+        incremental_strategy='delete+insert'
     )
 }}
 
@@ -21,6 +23,14 @@ WITH orders AS (
         CAST(order_delivered_customer_date AS DATE) AS order_delivered_customer_date,
         CAST(order_estimated_delivery_date AS DATE) AS order_estimated_delivery_date
     FROM {{ source('raw', 'orders') }}
+    {% if is_incremental() %}
+
+        WHERE order_purchase_timestamp > (
+            SELECT MAX(existing_table.order_purchase_timestamp)
+            FROM {{ this }} AS existing_table
+        )
+
+    {% endif%}
 )
 
 SELECT * 
