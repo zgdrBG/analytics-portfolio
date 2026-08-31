@@ -1,0 +1,158 @@
+version: 2
+
+models:
+  - name: staging_customers
+    description: >
+      Contains data for customers, their associated details and order ids.
+      Cleans, casts to appropriate data types and standardizes
+      customer records from the raw Olist customers source.
+    columns:
+      - name: customer_order_id
+        data_type: char(32)
+        description: Unique customer identifier associated with a specific order.
+        tests:
+          - not_null
+          - unique
+      - name: customer_unique_id
+        data_type: char(32)
+        description: Persistent unique identifier for a customer across multiple orders.
+        tests:
+          - not_null
+      - name: customer_zip_code
+        data_type: char(5)
+        description: Customer ZIP code prefix, limited to the first five characters.
+      - name: customer_city
+        data_type: varchar(100)
+        description: Customer city.
+      - name: customer_state
+        data_type: char(2)
+        description: Two-letter Brazilian state abbreviation for the customer location.
+
+  - name: staging_order_items
+    description: >
+      Contains data for items within each order, including product and seller details, pricing, and shipping information.
+      Cleans, casts to appropriate data types and standardizes
+      order item records from the raw Olist order items source.
+    columns:
+      - name: order_id
+        data_type: char(32)
+        description: Identifier for each order.
+        tests:
+          - not_null
+      - name: product_id
+        data_type: char(32)
+        description: Identifier for the product associated with the order.
+        tests:
+          - not_null
+      - name: seller_id
+        data_type: char(32)
+        description: Identifier for the seller associated with the order item.
+      - name: order_item_id
+        data_type: integer
+        description: Identifier for the order item within the order.
+      - name: price
+        data_type: numeric
+        description: Price of the order item.
+      - name: freight_value
+        data_type: numeric
+        description: Freight value for the order item.
+      - name: shipping_limit_timestamp
+        data_type: timestamp
+        description: Shipping limit timestamp for the seller to handle the ordered item to the logistics partner.
+
+  - name: staging_order_payments
+    description: >
+      Contains payment data for each order, including payment type, sequential number, installments, and payment value.
+      Cleans, casts to appropriate data types and standardizes
+      order payment records from the raw Olist order payments source.
+    columns:
+      - name: order_id
+        data_type: char(32)
+        description: Identifier for each order.
+        tests:
+          - not_null
+      - name: payment_sequential
+        data_type: integer
+        description: Indicates the number of payment methods used for the order.
+      - name: payment_type
+        data_type: varchar
+        description: Type of payment used for the order.
+      - name: payment_installments
+        data_type: integer
+        description: Number of installments for the payment.
+      - name: payment_value
+        data_type: numeric
+        description: Value of the payment.
+
+  - name: staging_orders
+    description: >
+      Contains data for orders made by customers, including order statuses, and associated timestamps.
+      Cleans, casts to appropriate data types and standardizes
+      order records from the raw Olist orders source.
+    columns:
+      - name: order_id
+        data_type: char(32)
+        description: Unique identifier for each order.
+        tests:
+          - not_null
+          - unique
+      - name: customer_order_id
+        data_type: char(32)
+        description: Customer identifier associated with the order.
+        tests:
+          - not_null
+      - name: order_status
+        data_type: varchar(30)
+        description: Current status of the order.
+      - name: order_purchase_timestamp
+        data_type: timestamp
+        description: Timestamp when the order was placed.
+      - name: order_approved_at
+        data_type: timestamp
+        description: Timestamp when the order was approved by the seller.
+      - name: order_delivered_carrier_date
+        data_type: date
+        description: Date when the order was handed to the carrier for delivery.
+      - name: order_delivered_customer_date
+        data_type: date
+        description: Date when the order was delivered to the customer.
+      - name: order_estimated_delivery_date
+        data_type: date
+        description: Estimated delivery date for the order.
+
+  - name: staging_products
+    description: >
+      Contains data for all the products available in the Olist catalog.
+      Cleans, casts to appropriate data types and standardizes
+      product records from the raw Olist products source.
+    columns:
+      - name: product_id
+        data_type: char(32)
+        description: Unique identifier for each product.
+        tests:
+          - not_null
+          - unique
+      - name: product_category_name
+        data_type: varchar
+        description: Category name of the product.
+      - name: product_name_lenght
+        data_type: integer
+        description: Length of the product name.
+      - name: product_description_lenght
+        data_type: integer
+        description: Length of the product description.
+      - name: product_photos_qty
+        data_type: integer
+        description: Number of photos available for the product.
+      - name: product_weight_g
+        data_type: numeric
+        description: Weight of the product in grams.
+      - name: product_length_cm
+        data_type: numeric
+        description: Length of the product in centimeters.
+      - name: product_height_cm
+        data_type: numeric
+        description: Height of the product in centimeters.
+      - name: product_width_cm
+        data_type: numeric
+        description: Width of the product in centimeters.

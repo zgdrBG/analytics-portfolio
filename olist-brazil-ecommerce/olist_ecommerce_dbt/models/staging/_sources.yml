@@ -1,0 +1,105 @@
+version: 2
+
+sources:
+  - name: raw
+    database: OLIST_ECOMMERCE_DB
+    schema: RAW
+    description: >
+      Raw Olist Brazil e-commerce data landing in the staging layer.
+      These tables contain the source records before any transformation or deduplication.
+
+    tables:
+      - name: customers
+        description: >
+          Contains data for customers, their associated details and order ids.
+          Cleans, casts to appropriate data types and standardizes
+          customer records from the raw Olist customers source.
+        columns:
+          - name: customer_id
+            description: Unique identifier for each customer record in the raw source.
+          - name: customer_unique_id
+            description: Persistent unique identifier for a customer across multiple orders.
+          - name: customer_zip_code_prefix
+            description: First five digits of the customer's ZIP code.
+          - name: customer_city
+            description: Customer city.
+          - name: customer_state
+            description: Two-letter Brazilian state abbreviation for the customer location.
+
+      - name: orders
+        description: >
+          Contains data for orders made by customers, including order statuses, and associated timestamps.
+        columns:
+          - name: order_id
+            description: Unique identifier for each order.
+          - name: customer_id
+            description: Customer identifier associated with the order.
+          - name: order_status
+            description: Current status of the order.
+          - name: order_purchase_timestamp
+            description: Timestamp when the order was placed.
+          - name: order_approved_at
+            description: Timestamp when the order was approved by the seller.
+          - name: order_delivered_carrier_date
+            description: Date when the order was handed to the carrier for delivery.
+          - name: order_delivered_customer_date
+            description: Date when the order was delivered to the customer.
+          - name: order_estimated_delivery_date
+            description: Estimated delivery date for the order.
+
+      - name: order_items
+        description: >
+          Contains data for items within each order, including product and seller details, pricing, and shipping information.
+        columns:
+          - name: order_id
+            description: Identifier of the parent order.
+          - name: order_item_id
+            description: Identifier for the order item within the order.
+          - name: product_id
+            description: Identifier for the product associated with the order.
+          - name: seller_id
+            description: Identifier for the seller associated with the order item.
+          - name: shipping_limit_date
+            description: Shipping limit date for the seller to handle the ordered item to the logistics partner.
+          - name: price
+            description: Price of the order item.
+          - name: freight_value
+            description: Freight value for the order item.
+
+      - name: order_payments
+        description: >
+          Contains payment data for each order, including payment type, sequential number, installments, and payment value.
+        columns:
+          - name: order_id
+            description: Identifier of the parent order.
+          - name: payment_sequential
+            description: Indicates the number of payment methods used for the order.
+          - name: payment_type
+            description: Type of payment used for the order.
+          - name: payment_installments
+            description: Number of installments for the payment.
+          - name: payment_value
+            description: Value of the payment.
+
+      - name: products
+        description: >
+          Contains data for all the products available in the Olist catalog.
+        columns:
+          - name: product_id
+            description: Unique identifier for each product.
+          - name: product_category_name
+            description: Category name of the product.
+          - name: product_name_lenght
+            description: Length of the product name.
+          - name: product_description_lenght
+            description: Length of the product description.
+          - name: product_photos_qty
+            description: Number of photos available for the product.
+          - name: product_weight_g
+            description: Weight of the product in grams.
+          - name: product_length_cm
+            description: Length of the product in centimeters.
+          - name: product_height_cm
+            description: Height of the product in centimeters.
+          - name: product_width_cm
+            description: Width of the product in centimeters.
