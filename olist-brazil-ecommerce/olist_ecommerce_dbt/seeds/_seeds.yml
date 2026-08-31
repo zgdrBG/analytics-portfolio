@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: product_category_translation
+    description: >
+      Contains data for product category translations.
+    columns:
+      - name: product_category_name
+        data_type: varchar
+        description: Original name of the product category in Portuguese.
+        tests:
+          - not_null
+      - name: product_category_name_english
+        data_type: varchar
+        description: Translated name of the product category in English.
+        tests:
+          - not_null
