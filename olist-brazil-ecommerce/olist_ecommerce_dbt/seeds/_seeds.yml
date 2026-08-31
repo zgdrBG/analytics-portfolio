@@ -1,6 +1,6 @@
 version: 2
 
-models:
+seeds:
   - name: product_category_translation
     description: >
       Contains data for product category translations.

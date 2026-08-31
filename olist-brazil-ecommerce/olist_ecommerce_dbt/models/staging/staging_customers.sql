@@ -23,9 +23,9 @@ customers AS (
             {{ replace_double_quotes('customer_unique_id') }}
             AS CHAR(32)
         ) AS customer_unique_id,
-        CAST(
-            {{ replace_double_quotes('customer_zip_code_prefix') }}
-            AS CHAR(5)
+        SHA2(
+            {{ replace_double_quotes('customer_zip_code_prefix') }},
+            256
         ) AS customer_zip_code,
         CAST(customer_city AS VARCHAR(100)) AS customer_city,
         CAST(customer_state AS CHAR(2)) AS customer_state

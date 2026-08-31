@@ -19,8 +19,8 @@ models:
         tests:
           - not_null
       - name: customer_zip_code
-        data_type: char(5)
-        description: Customer ZIP code prefix, limited to the first five characters.
+        data_type: varchar
+        description: SHA-256 hash ZIP code prefix, ensuring privacy of customer location data.
       - name: customer_city
         data_type: varchar(100)
         description: Customer city.
