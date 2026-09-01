@@ -1,0 +1,87 @@
+version: 2
+
+models:
+  - name: int_customers
+    description: >
+      Aggregates customer data with their total order counts and assigns a
+      rank (Bronze, Silver, Gold) based on order volume. Combines data from
+      staging_customers and staging_orders.
+    columns:
+      - name: customer_unique_id
+        data_type: char(32)
+        description: Persistent unique identifier for a customer across multiple orders.
+      - name: customer_city
+        data_type: varchar(100)
+        description: Customer city.
+      - name: customer_state
+        data_type: char(2)
+        description: Two-letter Brazilian state abbreviation for the customer location.
+      - name: total_orders
+        data_type: integer
+        description: Total number of orders placed by the customer, coalesced to 0 if none exist.
+      - name: customer_rank
+        data_type: varchar
+        description: Rank assigned to the customer based on total_orders - Bronze (<=2), Silver (<=4), or Gold (>4).
+  - name: int_customers
+    description: >
+      Aggregates customer data with their total order counts and assigns a loyalty
+      rank (Bronze, Silver, Gold) based on order volume. Combines data from
+      staging_customers and staging_orders.
+    columns:
+      - name: customer_unique_id
+        data_type: char(32)
+        description: Persistent unique identifier for a customer across multiple orders.
+        tests:
+          - not_null
+      - name: customer_city
+        data_type: varchar(100)
+        description: Customer city.
+      - name: customer_state
+        data_type: char(2)
+        description: Two-letter Brazilian state abbreviation for the customer location.
+      - name: total_orders
+        data_type: integer
+        description: Total number of orders placed by the customer, coalesced to 0 if none exist.
+      - name: customer_rank
+        data_type: varchar
+        description: >
+          Loyalty rank assigned to the customer based on total_orders:
+          Bronze (<=2), Silver (<=4), or Gold (>4).
+
+  - name: int_products_ordered
+    description: >
+      Filters the product catalog down to only products that have at least one
+      associated order item, and enriches them with their English category
+      translation. Combines data from staging_products, staging_order_items,
+      and product_category_translation.
+    columns:
+      - name: product_id
+        data_type: char(32)
+        description: Unique identifier for each product.
+      - name: product_category_name_pt
+        data_type: varchar
+        description: Product category name in Portuguese.
+      - name: product_category_name_en
+        data_type: varchar
+        description: English translation of the product category name.
+      - name: product_name_length
+        data_type: integer
+        description: Length of the product name.
+      - name: product_description_length
+        data_type: integer
+        description: Length of the product description.
+      - name: product_photos_qty
+        data_type: integer
+        description: Number of photos available for the product.
+      - name: product_weight_g
+        data_type: numeric
+        description: Weight of the product in grams.
+      - name: product_length_cm
+        data_type: numeric
+        description: Length of the product in centimeters.
+      - name: product_height_cm
+        data_type: numeric
+        description: Height of the product in centimeters.
+      - name: product_width_cm
+        data_type: numeric
+        description: Width of the product in centimeters.
