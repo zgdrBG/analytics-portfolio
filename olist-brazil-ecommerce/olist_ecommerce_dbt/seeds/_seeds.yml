@@ -8,10 +8,10 @@ seeds:
       - name: product_category_name
         data_type: varchar
         description: Original name of the product category in Portuguese.
-        tests:
+        data_tests:
           - not_null
       - name: product_category_name_english
         data_type: varchar
         description: Translated name of the product category in English.
-        tests:
+        data_tests:
           - not_null
