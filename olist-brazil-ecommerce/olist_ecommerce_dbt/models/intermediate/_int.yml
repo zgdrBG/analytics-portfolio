@@ -48,6 +48,80 @@ models:
           Loyalty rank assigned to the customer based on total_orders:
           Bronze (<=2), Silver (<=4), or Gold (>4).
 
+  - name: int_orders
+    description: >
+      Combines order data with payment details, and calculates delivery
+      performance metrics such as days to deliver, estimation accuracy, and
+      delivery delay classification. Combines data from staging_orders and
+      staging_order_payments.
+    columns:
+      - name: order_id
+        data_type: char(32)
+        description: Unique identifier for each order.
+        tests:
+          - not_null
+      - name: customer_order_id
+        data_type: char(32)
+        description: Customer identifier associated with the order.
+        tests:
+          - not_null
+      - name: order_status
+        data_type: varchar(30)
+        description: Current status of the order.
+      - name: order_purchase_date
+        data_type: date
+        description: Date when the order was placed, derived from the purchase timestamp.
+      - name: order_puchase_month
+        data_type: integer
+        description: Month extracted from the order purchase date.
+      - name: order_puchase_year
+        data_type: integer
+        description: Year extracted from the order purchase date.
+      - name: order_delivered_carrier_date
+        data_type: date
+        description: Date when the order was handed to the carrier for delivery.
+      - name: order_delivered_customer_date
+        data_type: date
+        description: Date when the order was delivered to the customer.
+      - name: order_estimated_delivery_date
+        data_type: date
+        description: Estimated delivery date for the order.
+      - name: payment_sequential
+        data_type: integer
+        description: Indicates the number of payment methods used for the order.
+      - name: payment_type
+        data_type: varchar
+        description: Type of payment used for the order.
+      - name: payment_installments
+        data_type: integer
+        description: Number of installments for the payment.
+      - name: payment_value
+        data_type: numeric
+        description: Value of the payment.
+      - name: is_order_paid
+        data_type: boolean
+        description: Flag indicating whether the order has an associated payment record.
+      - name: is_order_paid_in_full
+        data_type: boolean
+        description: Flag indicating whether the order was paid in full.
+      - name: days_to_deliver_customer
+        data_type: integer
+        description: Number of days between the order purchase date and the customer delivery date.
+      - name: estimated_days_to_deliver_customer
+        data_type: integer
+        description: Number of days between the customer delivery date and the estimated delivery date.
+      - name: estimation_delivery_days_diff
+        data_type: integer
+        description: Difference between estimated and actual delivery days.
+      - name: is_delivery_late
+        data_type: boolean
+        description: Flag indicating whether the order delivery was late relative to the estimated delivery date.
+      - name: delivery_delay_type
+        data_type: varchar
+        description: >
+          Classification of the delivery delay severity: Minor (<=3 days late),
+          Moderate (<=7 days late), Severe (>7 days late), or On-time.
+
   - name: int_products_ordered
     description: >
       Filters the product catalog down to only products that have at least one
