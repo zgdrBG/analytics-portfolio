@@ -1,0 +1,55 @@
+== [models\intermediate\int_orders.sql] FAIL
+L:  61 | P:  17 | LT02 | Expected line break and indent of 16 spaces before
+                       | 'is_delivery_late'. [layout.indent]
+L:  64 | P:  17 | LT02 | Expected line break and indent of 16 spaces before
+                       | 'is_delivery_late'. [layout.indent]
+== [models\staging\staging_customers.sql] FAIL
+L:  18 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  18 | P:   9 |  PRS | Line 14, Position 9: Found unparsable section: 'CAST(\n 
+                       | \n            AS CHAR(3...'
+L:  19 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+L:  23 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+L:  27 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+WARNING: Parsing errors found and dialect is set to 'snowflake'. Have you configured your dialect correctly?
+== [models\staging\staging_order_items.sql] FAIL
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   9 |  PRS | Line 5, Position 9: Found unparsable section: 'CAST(\n  
+                       | \n            AS CHAR(3...'
+L:  10 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+L:  14 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+L:  18 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+WARNING: Parsing errors found and dialect is set to 'snowflake'. Have you configured your dialect correctly?
+== [models\staging\staging_order_payments.sql] FAIL
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   9 |  PRS | Line 5, Position 9: Found unparsable section: 'CAST(\n  
+                       | \n            AS CHAR(3...'
+L:  10 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+WARNING: Parsing errors found and dialect is set to 'snowflake'. Have you configured your dialect correctly?
+== [models\staging\staging_orders.sql] FAIL
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   9 |  PRS | Line 5, Position 9: Found unparsable section: 'CAST(\n  
+                       | \n            AS CHAR(3...'
+L:  12 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+L:  16 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+L:  33 | P:   5 | JJ01 | Jinja tags should have a single whitespace on either
+                       | side: {% endif%} [jinja.padding]
+WARNING: Parsing errors found and dialect is set to 'snowflake'. Have you configured your dialect correctly?
+== [models\staging\staging_products.sql] FAIL
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   9 |  PRS | Line 5, Position 9: Found unparsable section: 'CAST(\n  
+                       | \n            AS CHAR(3...'
+L:  10 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+L:  14 | P:  16 |  TMP | Undefined jinja template variable:
+                       | 'replace_double_quotes'
+WARNING: Parsing errors found and dialect is set to 'snowflake'. Have you configured your dialect correctly?
+All Finished!

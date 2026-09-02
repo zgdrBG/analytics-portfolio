@@ -32,5 +32,5 @@ customers AS (
     FROM deduplicated_data
 )
 
-SELECT * 
+SELECT *
 FROM customers

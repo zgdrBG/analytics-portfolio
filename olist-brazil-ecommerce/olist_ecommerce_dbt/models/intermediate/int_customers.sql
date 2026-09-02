@@ -31,7 +31,7 @@ customers_and_orders AS (
 
 customers_ranked AS (
     SELECT
-        customers_and_orders.*,
+        *,
         CASE
             WHEN total_orders <= 2 THEN 'Bronze'
             WHEN total_orders <= 4 THEN 'Silver'

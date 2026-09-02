@@ -33,7 +33,7 @@ orders_and_payments AS (
         ) AS order_puchase_month,
         DATE_PART(
             YEAR, order_purchase_date
-        ) AS order_puchase_year,        
+        ) AS order_puchase_year,
         staging_orders.order_delivered_carrier_date,
         staging_orders.order_delivered_customer_date,
         staging_orders.order_estimated_delivery_date,
@@ -41,16 +41,8 @@ orders_and_payments AS (
         staging_order_payments.payment_type,
         staging_order_payments.payment_installments,
         staging_order_payments.payment_value,
-        CASE
-            WHEN staging_order_payments.order_id IS NULL
-                THEN FALSE
-            ELSE TRUE
-        END AS is_order_paid,
-        CASE
-            WHEN staging_order_payments.payment_installments = 1
-                THEN TRUE
-            ELSE FALSE
-        END AS is_order_paid_in_full,
+        staging_order_payments.order_id IS NOT NULL AS is_order_paid,
+        COALESCE(staging_order_payments.payment_installments = 1, FALSE) AS is_order_paid_in_full,
         DATEDIFF(
             DAY,
             order_purchase_date,
@@ -62,20 +54,16 @@ orders_and_payments AS (
             staging_orders.order_estimated_delivery_date
         ) AS estimated_days_to_deliver_customer,
         (
-            estimated_days_to_deliver_customer - days_to_deliver_customer 
+            estimated_days_to_deliver_customer - days_to_deliver_customer
         ) AS estimation_delivery_days_diff,
-        CASE
-            WHEN estimation_delivery_days_diff >= 0
-                THEN FALSE
-            ELSE TRUE
-        END is_delivery_late,
+        COALESCE(estimation_delivery_days_diff >= 0, TRUE) AS is_delivery_late,
         CASE
             WHEN is_delivery_late
                 AND estimation_delivery_days_diff >= -3
-                THEN 'Minor'
+                    THEN 'Minor'
             WHEN is_delivery_late
                 AND estimation_delivery_days_diff >= -7
-                THEN 'Moderate'
+                    THEN 'Moderate'
             WHEN is_delivery_late
                 THEN 'Severe'
             ELSE 'On-time'

@@ -25,5 +25,5 @@ WITH products AS (
     FROM {{ source('raw', 'products') }}
 )
 
-SELECT * 
+SELECT *
 FROM products

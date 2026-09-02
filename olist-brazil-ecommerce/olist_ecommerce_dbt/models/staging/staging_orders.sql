@@ -30,8 +30,8 @@ WITH orders AS (
             FROM {{ this }} AS existing_table
         )
 
-    {% endif%}
+    {% endif %}
 )
 
-SELECT * 
+SELECT *
 FROM orders
