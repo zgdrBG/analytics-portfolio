@@ -13,17 +13,44 @@ WITH staging_orders AS (
 staging_order_payments AS (
     SELECT
         order_id,
-        payment_sequential,
-        payment_type,
+        /*
+        in cases of multiple payment types we consider
+        the payment with the biggest non aggregated
+        value to be the main payment type
+        */
+        FIRST_VALUE(payment_type) OVER (
+            PARTITION BY order_id ORDER BY payment_value DESC
+        ) AS payment_type,
         payment_installments,
         payment_value
     FROM {{ ref('staging_order_payments') }}
+),
+
+order_payments_agg AS (
+    SELECT 
+        order_id,
+        payment_type,
+        MAX(payment_installments) AS payment_installments,
+        SUM(payment_value) AS payment_value
+    FROM staging_order_payments
+    GROUP BY 1, 2
+),
+
+staging_order_items AS (
+    SELECT
+        order_id,
+        LISTAGG(product_id, ', ') AS products_purchased,
+        COUNT(product_id) AS number_products_purchased
+    FROM {{ ref('staging_order_items') }}
+    GROUP BY 1
 ),
 
 orders_and_payments AS (
     SELECT
         staging_orders.order_id,
         staging_orders.customer_order_id,
+        staging_order_items.products_purchased,
+        staging_order_items.number_products_purchased,
         staging_orders.order_status,
         CAST(
             staging_orders.order_purchase_timestamp AS DATE
@@ -37,12 +64,11 @@ orders_and_payments AS (
         staging_orders.order_delivered_carrier_date,
         staging_orders.order_delivered_customer_date,
         staging_orders.order_estimated_delivery_date,
-        staging_order_payments.payment_sequential,
-        staging_order_payments.payment_type,
-        staging_order_payments.payment_installments,
-        staging_order_payments.payment_value,
-        staging_order_payments.order_id IS NOT NULL AS is_order_paid,
-        COALESCE(staging_order_payments.payment_installments = 1, FALSE) AS is_order_paid_in_full,
+        order_payments_agg.payment_type,
+        order_payments_agg.payment_installments,
+        order_payments_agg.payment_value,
+        order_payments_agg.order_id IS NOT NULL AS is_order_paid,
+        COALESCE(order_payments_agg.payment_installments = 1, FALSE) AS is_order_paid_in_full,
         DATEDIFF(
             DAY,
             order_purchase_date,
@@ -69,8 +95,10 @@ orders_and_payments AS (
             ELSE 'On-time'
         END AS delivery_delay_type
     FROM staging_orders
-    LEFT JOIN staging_order_payments
-        ON staging_orders.order_id = staging_order_payments.order_id
+    LEFT JOIN order_payments_agg
+        ON staging_orders.order_id = order_payments_agg.order_id
+    LEFT JOIN staging_order_items
+        ON staging_orders.order_id = staging_order_items.order_id
 )
 
 SELECT * FROM orders_and_payments

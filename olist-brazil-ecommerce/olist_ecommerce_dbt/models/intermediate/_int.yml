@@ -6,32 +6,13 @@ models:
       Aggregates customer data with their total order counts and assigns a
       rank (Bronze, Silver, Gold) based on order volume. Combines data from
       staging_customers and staging_orders.
+      This model does not have a single record per customer_unique_id as some
+      customers have made orders from several loctions.
     columns:
       - name: customer_unique_id
         data_type: char(32)
         description: Persistent unique identifier for a customer across multiple orders.
-      - name: customer_city
-        data_type: varchar(100)
-        description: Customer city.
-      - name: customer_state
-        data_type: char(2)
-        description: Two-letter Brazilian state abbreviation for the customer location.
-      - name: total_orders
-        data_type: integer
-        description: Total number of orders placed by the customer, coalesced to 0 if none exist.
-      - name: customer_rank
-        data_type: varchar
-        description: Rank assigned to the customer based on total_orders - Bronze (<=2), Silver (<=4), or Gold (>4).
-  - name: int_customers
-    description: >
-      Aggregates customer data with their total order counts and assigns a loyalty
-      rank (Bronze, Silver, Gold) based on order volume. Combines data from
-      staging_customers and staging_orders.
-    columns:
-      - name: customer_unique_id
-        data_type: char(32)
-        description: Persistent unique identifier for a customer across multiple orders.
-        tests:
+        data_tests:
           - not_null
       - name: customer_city
         data_type: varchar(100)
@@ -39,14 +20,9 @@ models:
       - name: customer_state
         data_type: char(2)
         description: Two-letter Brazilian state abbreviation for the customer location.
-      - name: total_orders
+      - name: total_orders_by_location
         data_type: integer
-        description: Total number of orders placed by the customer, coalesced to 0 if none exist.
-      - name: customer_rank
-        data_type: varchar
-        description: >
-          Loyalty rank assigned to the customer based on total_orders:
-          Bronze (<=2), Silver (<=4), or Gold (>4).
+        description: Total number of orders placed by the customer and their location, coalesced to 0 if none exist.
 
   - name: int_orders
     description: >
@@ -58,13 +34,20 @@ models:
       - name: order_id
         data_type: char(32)
         description: Unique identifier for each order.
-        tests:
+        data_tests:
           - not_null
+          - unique
       - name: customer_order_id
         data_type: char(32)
         description: Customer identifier associated with the order.
-        tests:
+        data_tests:
           - not_null
+      - name: products_purchased
+        data_type: varchar
+        description: All product ids purchased as part of the order, separated by a comma.
+      - name: number_products_purchased
+        data_type: integer
+        description: The number of productds purchased as part of the order.
       - name: order_status
         data_type: varchar(30)
         description: Current status of the order.
@@ -85,10 +68,7 @@ models:
         description: Date when the order was delivered to the customer.
       - name: order_estimated_delivery_date
         data_type: date
-        description: Estimated delivery date for the order.
-      - name: payment_sequential
-        data_type: integer
-        description: Indicates the number of payment methods used for the order.
+        description: Estimated delivery date for the order..
       - name: payment_type
         data_type: varchar
         description: Type of payment used for the order.
@@ -132,6 +112,9 @@ models:
       - name: product_id
         data_type: char(32)
         description: Unique identifier for each product.
+        data_tests:
+          - not_null
+          - unique
       - name: product_category_name_pt
         data_type: varchar
         description: Product category name in Portuguese.

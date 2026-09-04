@@ -22,22 +22,11 @@ customers_and_orders AS (
         staging_customers.customer_state,
         COALESCE(
             COUNT(staging_orders.order_id), 0
-        ) AS total_orders
+        ) AS total_orders_by_location
     FROM staging_customers
     LEFT JOIN staging_orders
         ON staging_customers.customer_order_id = staging_orders.customer_order_id
     GROUP BY 1, 2, 3
-),
-
-customers_ranked AS (
-    SELECT
-        *,
-        CASE
-            WHEN total_orders <= 2 THEN 'Bronze'
-            WHEN total_orders <= 4 THEN 'Silver'
-            ELSE 'Gold'
-        END AS customer_rank
-    FROM customers_and_orders
 )
 
-SELECT * FROM customers_ranked
+SELECT * FROM customers_and_orders
