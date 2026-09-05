@@ -3,6 +3,12 @@ import snowflake.connector
 from cryptography.hazmat.primitives import serialization
 from config import snowflake_config
 
+'''
+Connects to Snowflake by loading a private key from a local PEM file
+and establishing a connection to Snowflake using key-pair authentication,
+based on credentials defined in `config.snowflake_config`.
+'''
+
 private_key_path = os.path.join(
     os.getcwd(),
     "keys",

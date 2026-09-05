@@ -1,5 +1,7 @@
 from snowflake_connector import create_connection
 
+''' Tests if the connection to Snowflake is successful.'''
+
 def test_connection():
     with create_connection() as connection:
         with connection.cursor() as cursor:

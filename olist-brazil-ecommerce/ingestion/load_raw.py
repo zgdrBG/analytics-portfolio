@@ -1,5 +1,7 @@
 from snowflake_connector import create_connection
 
+'''Loads local CSV files to a Snowflake stage.'''
+
 table_schemas = {
     "olist_customers_dataset.csv": {
         "table": "customers",
