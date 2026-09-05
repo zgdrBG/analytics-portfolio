@@ -57,10 +57,10 @@ orders_and_payments AS (
         ) AS order_purchase_date,
         DATE_PART(
             MONTH, order_purchase_date
-        ) AS order_puchase_month,
+        ) AS order_purchase_month,
         DATE_PART(
             YEAR, order_purchase_date
-        ) AS order_puchase_year,
+        ) AS order_purchase_year,
         staging_orders.order_delivered_carrier_date,
         staging_orders.order_delivered_customer_date,
         staging_orders.order_estimated_delivery_date,

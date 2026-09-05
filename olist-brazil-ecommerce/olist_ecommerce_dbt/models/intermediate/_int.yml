@@ -52,10 +52,10 @@ models:
       - name: order_purchase_date
         data_type: date
         description: Date when the order was placed, derived from the purchase timestamp.
-      - name: order_puchase_month
+      - name: order_purchase_month
         data_type: integer
         description: Month extracted from the order purchase date.
-      - name: order_puchase_year
+      - name: order_purchase_year
         data_type: integer
         description: Year extracted from the order purchase date.
       - name: order_delivered_carrier_date
