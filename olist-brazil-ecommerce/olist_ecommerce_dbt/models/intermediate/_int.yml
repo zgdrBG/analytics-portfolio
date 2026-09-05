@@ -3,11 +3,9 @@ version: 2
 models:
   - name: int_customers
     description: >
-      Aggregates customer data with their total order counts and assigns a
-      rank (Bronze, Silver, Gold) based on order volume. Combines data from
-      staging_customers and staging_orders.
-      This model does not have a single record per customer_unique_id as some
-      customers have made orders from several loctions.
+      Joins customers to their orders and keeps only the most recent order and
+      location per customer, discarding customers with no orders. Combines data
+      from staging_customers and staging_orders.
     columns:
       - name: customer_unique_id
         data_type: char(32)
@@ -20,16 +18,16 @@ models:
       - name: customer_state
         data_type: char(2)
         description: Two-letter Brazilian state abbreviation for the customer location.
-      - name: total_orders_by_location
-        data_type: integer
-        description: Total number of orders placed by the customer and their location, coalesced to 0 if none exist.
+      - name: latest_order_timestamp
+        data_type: timestamp
+        description: The latest order timestamp for each customer.
 
   - name: int_orders
     description: >
-      Combines order data with payment details, and calculates delivery
-      performance metrics such as days to deliver, estimation accuracy, and
-      delivery delay classification. Combines data from staging_orders and
-      staging_order_payments.
+      Combines order data with payment and product details, and calculates
+      delivery performance metrics such as days to deliver, estimation
+      accuracy, and delivery delay classification. Combines data from
+      staging_orders, staging_order_payments, and staging_order_items.
     columns:
       - name: order_id
         data_type: char(32)

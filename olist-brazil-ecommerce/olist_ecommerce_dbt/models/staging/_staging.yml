@@ -135,10 +135,10 @@ models:
       - name: product_category_name
         data_type: varchar
         description: Product category name in Portuguese.
-      - name: product_name_lenght
+      - name: product_name_length
         data_type: integer
         description: Length of the product name.
-      - name: product_description_lenght
+      - name: product_description_length
         data_type: integer
         description: Length of the product description.
       - name: product_photos_qty

@@ -11,7 +11,8 @@ WITH staging_customers AS (
 staging_orders AS (
     SELECT
         customer_order_id,
-        order_id
+        order_id,
+        order_purchase_timestamp
     FROM {{ ref('staging_orders') }}
 ),
 
@@ -20,13 +21,15 @@ customers_and_orders AS (
         staging_customers.customer_unique_id,
         staging_customers.customer_city,
         staging_customers.customer_state,
-        COALESCE(
-            COUNT(staging_orders.order_id), 0
-        ) AS total_orders_by_location
+        order_purchase_timestamp AS latest_order_timestamp
     FROM staging_customers
-    LEFT JOIN staging_orders
+    -- only keep customers that have made orders
+    INNER JOIN staging_orders
         ON staging_customers.customer_order_id = staging_orders.customer_order_id
-    GROUP BY 1, 2, 3
+    QUALIFY ROW_NUMBER() OVER(
+        PARTITION BY staging_customers.customer_unique_id
+        ORDER BY staging_orders.order_purchase_timestamp DESC
+    ) = 1
 )
 
 SELECT * FROM customers_and_orders

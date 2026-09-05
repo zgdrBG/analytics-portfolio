@@ -12,8 +12,6 @@ sources:
       - name: customers
         description: >
           Contains data for customers, their associated details and order ids.
-          Cleans, casts to appropriate data types and standardizes
-          customer records from the raw Olist customers source.
         columns:
           - name: customer_id
             description: Unique identifier for each customer record in the raw source.
