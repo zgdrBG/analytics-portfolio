@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: mart_orders_in_fulfillment
+    description: >
+      Contains paid orders that are currently in fulfillment or have been
+      delivered. Enriches the order fulfillment and delivery metrics from
+      int_orders with each customer's persistent identifier.
+    columns:
+      - name: order_id
+        data_type: char(32)
+        description: Unique identifier for each order.
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_unique_id
+        data_type: char(32)
+        description: Persistent unique identifier for a customer across multiple orders.
+      - name: order_status
+        data_type: varchar(30)
+        description: Current status of the order.
+      - name: order_purchase_date
+        data_type: date
+        description: Date when the order was placed, derived from the purchase timestamp.
+      - name: order_purchase_month
+        data_type: integer
+        description: Month extracted from the order purchase date.
+      - name: order_purchase_year
+        data_type: integer
+        description: Year extracted from the order purchase date.
+      - name: number_products_purchased
+        data_type: integer
+        description: The number of products purchased as part of the order.
+      - name: payment_type
+        data_type: varchar
+        description: Type of payment used for the order.
+      - name: payment_installments
+        data_type: integer
+        description: Number of installments for the payment.
+      - name: payment_value
+        data_type: numeric
+        description: Value of the payment.
+      - name: is_order_paid_in_full
+        data_type: boolean
+        description: Flag indicating whether the order was paid in full.
+      - name: days_to_deliver_customer
+        data_type: integer
+        description: Number of days between the order purchase date and the customer delivery date.
+      - name: estimated_days_to_deliver_customer
+        data_type: integer
+        description: Number of days between the customer delivery date and the estimated delivery date.
+      - name: estimation_delivery_days_diff
+        data_type: integer
+        description: Difference between estimated and actual delivery days.
+      - name: is_delivery_late
+        data_type: boolean
+        description: Flag indicating whether the order delivery was late relative to the estimated delivery date.
+      - name: delivery_delay_type
+        data_type: varchar
+        description: >
+          Classification of the delivery delay severity: Minor (<=3 days late),
+          Moderate (<=7 days late), Severe (>7 days late), or On-time.

@@ -4,15 +4,23 @@
     )
 }}
 
-WITH int_orders AS (
+WITH staging_customers AS (
+    SELECT
+        customer_order_id,
+        customer_unique_id
+    FROM {{ ref('staging_customers') }}
+
+),
+
+int_orders AS (
     SELECT
         order_id,
-        products_purchased,
-        number_products_purchased,
+        customer_order_id,
         order_status,
         order_purchase_date,
         order_purchase_month,
         order_purchase_year,
+        number_products_purchased,
         payment_type,
         payment_installments,
         payment_value,
@@ -30,7 +38,14 @@ WITH int_orders AS (
             'processing',
             'shipped'
         )
-) 
+),
+
+order_by_customers AS (
+    SELECT * EXCLUDE customer_order_id
+    FROM int_orders
+    LEFT JOIN staging_customers
+        USING (customer_order_id)
+)
 
 SELECT *
-FROM int_orders
+FROM order_by_customers
