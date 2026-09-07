@@ -31,7 +31,8 @@ int_orders AS (
         is_delivery_late,
         delivery_delay_type
     FROM {{ ref('int_orders') }}
-    WHERE is_order_paid
+    WHERE 
+        is_order_paid
         AND order_status IN (
             'delivered',
             'invoiced',
@@ -41,7 +42,7 @@ int_orders AS (
 ),
 
 order_by_customers AS (
-    SELECT * EXCLUDE customer_order_id
+    SELECT staging_customers.* EXCLUDE customer_order_id
     FROM int_orders
     LEFT JOIN staging_customers
         USING (customer_order_id)

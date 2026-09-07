@@ -27,7 +27,7 @@ staging_order_payments AS (
 ),
 
 order_payments_agg AS (
-    SELECT 
+    SELECT
         order_id,
         payment_type,
         MAX(payment_installments) AS payment_installments,

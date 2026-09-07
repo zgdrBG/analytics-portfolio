@@ -21,12 +21,12 @@ customers_and_orders AS (
         staging_customers.customer_unique_id,
         staging_customers.customer_city,
         staging_customers.customer_state,
-        order_purchase_timestamp AS latest_order_timestamp
+        staging_orders.order_purchase_timestamp AS latest_order_timestamp
     FROM staging_customers
     -- only keep customers that have made orders
     INNER JOIN staging_orders
         ON staging_customers.customer_order_id = staging_orders.customer_order_id
-    QUALIFY ROW_NUMBER() OVER(
+    QUALIFY ROW_NUMBER() OVER (
         PARTITION BY staging_customers.customer_unique_id
         ORDER BY staging_orders.order_purchase_timestamp DESC
     ) = 1
