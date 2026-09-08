@@ -17,7 +17,7 @@ Tech stack:
 - SQL
 - Python
 - Snowflake
-- Tableau / Power BI
+- Tableau
 - Git
 
 # Source data
