@@ -1,6 +1,8 @@
 {{
     config(
-        materialized='table'
+        materialized='incremental',
+        unique_key='product_id',
+        incremental_strategy='append'
     )
 }}
 
@@ -23,6 +25,14 @@ WITH products AS (
         CAST(product_height_cm AS INT) AS product_height_cm,
         CAST(product_width_cm AS INT) AS product_width_cm
     FROM {{ source('raw', 'products') }}
+    {% if is_incremental() %}
+
+        WHERE product_id NOT IN (
+            SELECT existing_table.product_id
+            FROM {{ this }} AS existing_table
+        )
+
+    {% endif %}
 )
 
 SELECT *
