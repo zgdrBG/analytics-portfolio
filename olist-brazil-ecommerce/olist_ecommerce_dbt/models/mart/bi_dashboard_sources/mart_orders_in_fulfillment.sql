@@ -42,7 +42,7 @@ int_orders AS (
 ),
 
 order_by_customers AS (
-    SELECT staging_customers.* EXCLUDE customer_order_id
+    SELECT int_orders.* EXCLUDE customer_order_id
     FROM int_orders
     LEFT JOIN staging_customers
         USING (customer_order_id)
